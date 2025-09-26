@@ -19,7 +19,9 @@ namespace XmlConstruction
 	public static class XmlConstructor
 	{
 		const string templateXml = "template.xml";
-        static Regex pattern = new Regex(@"\s+|(?<=\w)(?=\W)");
+        const string punctPos = "PUNCT";
+        static Regex tokenBoundary = new Regex(@"\s+|(?<=\w)(?=\W)|(?<=\W)(?=\w)|(?<=\W)(?=\W)");
+        static Regex punct = new Regex(@"\W");
 		public static void ConstructDirectory(string source, string target)
 		{
 			List<string> directories = new List<string>(Directory.GetDirectories(source, "*", SearchOption.AllDirectories));
@@ -52,29 +54,34 @@ namespace XmlConstruction
 				string line;
 				while ((line = sr.ReadLine()) != null)
 				{
-					string[] split = line.Split('\t');
-					string id, lineText;
-					if (split.Length == 2)
-					{
-						id = split[0];
-						lineText = split[1];
-					}
-					else if (split.Length == 1)
-					{
-						id = i.ToString();
-						i++;
-						lineText = line;
-					}
-					else
-					{
-						throw new ArgumentException(line);
-					}
-					ConstructLineBreak(doc, text, textName, id);
-					string[] words = pattern.Split(lineText);
-					foreach (string word in words)
-					{
-						ConstructWord(doc, text, word);
-					}
+                    if (line.Trim() != String.Empty)
+                    {
+                        string[] split = line.Split('\t');
+                        string id, lineText;
+                        if (split.Length == 2)
+                        {
+                            id = split[0];
+                            lineText = split[1];
+                        }
+                        else if (split.Length == 1)
+                        {
+                            id = i.ToString();
+                            i++;
+                            lineText = line;
+                        }
+                        else
+                        {
+                            throw new ArgumentException(line);
+                        }
+                        ConstructLineBreak(doc, text, textName, id);
+                        IEnumerable<string> words = from word in tokenBoundary.Split(lineText)
+                                            where word != String.Empty
+                                            select word;
+                        foreach (string word in words)
+                        {
+                            ConstructWord(doc, text, word);
+                        }
+                    }
 				}
 			}
 			string directory = Path.GetDirectoryName(outfile);
@@ -105,11 +112,21 @@ namespace XmlConstruction
 			XmlAttribute mrp0selAttribute = doc.CreateAttribute("mrp0sel");
 			mrp0selAttribute.Value = "";
 			wordElement.Attributes.Append(mrp0selAttribute);
-            string placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word);
+            string placeholderAnalysis;
+            bool isHit = false;
+            if (punct.IsMatch(word))
+            {
+              placeholderAnalysis = String.Format(" {0} @ @ @ {1} @ ", word, punctPos);
+              isHit = true;
+            }
+            else
+            {
+              placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word);
+            }
             wordElement.AddAttribute("mrp1", placeholderAnalysis);
             wordElement.AddAttribute("firstAnalysisIsPlaceholder", "true");
 			text.AppendChild(wordElement);
-			bool isHit = false;
+
 			foreach(XmlNode childNode in wordElement.ChildNodes)
 			{
 				if (childNode.Name == "sGr")
