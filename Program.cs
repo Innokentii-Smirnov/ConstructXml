@@ -105,6 +105,9 @@ namespace XmlConstruction
 			XmlAttribute mrp0selAttribute = doc.CreateAttribute("mrp0sel");
 			mrp0selAttribute.Value = "";
 			wordElement.Attributes.Append(mrp0selAttribute);
+            string placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word);
+            wordElement.AddAttribute("mrp1", placeholderAnalysis);
+            wordElement.AddAttribute("firstAnalysisIsPlaceholder", "true");
 			text.AppendChild(wordElement);
 			bool isHit = false;
 			foreach(XmlNode childNode in wordElement.ChildNodes)
