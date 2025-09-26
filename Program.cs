@@ -121,7 +121,7 @@ namespace XmlConstruction
             }
             else
             {
-              placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word);
+              placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word.ToLower());
             }
             wordElement.AddAttribute("mrp1", placeholderAnalysis);
             wordElement.AddAttribute("firstAnalysisIsPlaceholder", "true");
