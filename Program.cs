@@ -19,6 +19,7 @@ namespace XmlConstruction
 	public static class XmlConstructor
 	{
 		const string templateXml = "template.xml";
+        static Regex pattern = new Regex(@"\s+|(?<=\w)(?=\W)");
 		public static void ConstructDirectory(string source, string target)
 		{
 			List<string> directories = new List<string>(Directory.GetDirectories(source, "*", SearchOption.AllDirectories));
@@ -34,7 +35,6 @@ namespace XmlConstruction
 				}
 			}
 		}
-		private readonly static char[] sep = new char[] {' '};
 		public static void ConstructFile(string infile, string outfile)
 		{
 			XmlDocument doc = new XmlDocument();
@@ -70,7 +70,7 @@ namespace XmlConstruction
 						throw new ArgumentException(line);
 					}
 					ConstructLineBreak(doc, text, textName, id);
-					string[] words = lineText.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+					string[] words = pattern.Split(lineText);
 					foreach (string word in words)
 					{
 						ConstructWord(doc, text, word);
