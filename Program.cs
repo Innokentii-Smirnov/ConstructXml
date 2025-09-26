@@ -46,7 +46,7 @@ namespace XmlConstruction
 			}
 			XmlNode publ = doc.GetElementsByTagName("AO:TxtPubl")[0];
 			string textName = Path.GetFileNameWithoutExtension(infile);
-			publ.InnerXml = SecurityElement.Escape(textName);
+			publ.InnerXml = textName.Escape();
 			XmlNode text = doc.GetElementsByTagName("text")[0];
 			using (StreamReader sr = new StreamReader(infile))
 			{
@@ -330,5 +330,14 @@ namespace XmlConstruction
 			child.AddAttributes(attrs);
 			node.AppendChild(child);
 		}
+		private static string Escape(this string s)
+        {
+          s = s.Replace("&", "-");
+          s = s.Replace("<", "(");
+          s = s.Replace(">", ")");
+          s = s.Replace("\"", String.Empty);
+          s = s.Replace("'", String.Empty);
+          return s;
+        }
 	}
 }
