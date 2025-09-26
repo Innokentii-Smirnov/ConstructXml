@@ -1,2 +1,6 @@
 bin
 obj
+input/*
+output/*
+!input/Caes_Gall_1.1.txt
+!output/Caes_Gall_1.1.xml

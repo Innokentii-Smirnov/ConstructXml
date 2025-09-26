@@ -1,15 +1,16 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Xml;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Security;
 
 namespace XmlConstruction
 {
 	static class Program
 	{
-		const string source = @"C:\Corpora\Hurrian\Transliterations";
-		const string target = @"C:\Corpora\Hurrian\Original";
+		const string source = "input";
+		const string target = "output";
 		static void Main()
 		{
 			XmlConstructor.ConstructDirectory(source, target);
@@ -17,10 +18,11 @@ namespace XmlConstruction
 	}
 	public static class XmlConstructor
 	{
-		const string templateXml = @"C:\Corpora\Hurrian\Template.xml";
+		const string templateXml = "template.xml";
 		public static void ConstructDirectory(string source, string target)
 		{
-			string[] directories = Directory.GetDirectories(source, "*", SearchOption.AllDirectories);
+			List<string> directories = new List<string>(Directory.GetDirectories(source, "*", SearchOption.AllDirectories));
+            directories.Add(source);
 			foreach (string directory in directories)
 			{
 				foreach (string infile in Directory.GetFiles(directory))
@@ -42,7 +44,7 @@ namespace XmlConstruction
 			}
 			XmlNode publ = doc.GetElementsByTagName("AO:TxtPubl")[0];
 			string textName = Path.GetFileNameWithoutExtension(infile);
-			publ.InnerXml = textName;
+			publ.InnerXml = SecurityElement.Escape(textName);
 			XmlNode text = doc.GetElementsByTagName("text")[0];
 			using (StreamReader sr = new StreamReader(infile))
 			{
