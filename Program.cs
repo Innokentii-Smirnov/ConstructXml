@@ -105,7 +105,7 @@ namespace XmlConstruction
 		private static void ConstructWord(XmlDocument doc, XmlNode text, string word)
 		{
 			XmlElement wordElement = doc.CreateElement("w");
-			wordElement.SetContent(word);
+			wordElement.SetContent(word.ToLower());
 			XmlAttribute transAttribute = doc.CreateAttribute("trans");
 			transAttribute.Value = "";
 			wordElement.Attributes.Append(transAttribute);
