@@ -258,31 +258,6 @@ namespace XmlConstruction
 					node.AppendChild(child);
 					i += rasur.Length - 1;
 				}
-				else if (i >= 1 && vowels.Contains(prev = word[i-1]) &&
-						(prev == character || prev == 'u' && character == 'ú'))
-				{
-					if (current != "")
-					{
-						XmlText text = node.OwnerDocument.CreateTextNode(current);
-						node.AppendChild(text);
-						current = "";
-					}
-					XmlNode child = node.OwnerDocument.CreateElement("subscr");
-					XmlAttribute attr = node.OwnerDocument.CreateAttribute("c");
-					attr.Value = character.ToString();
-					child.Attributes.Append(attr);
-					node.AppendChild(child);
-				}
-				else if (character == '?' || character == '!')
-				{
-					if (current != "")
-					{
-						XmlText text = node.OwnerDocument.CreateTextNode(current);
-						node.AppendChild(text);
-						current = "";
-					}
-					node.CreateChild("corr", "c", character.ToString());
-				}
 				else if (char.IsDigit(character))
 				{
 					if (current != "")
