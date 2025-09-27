@@ -54,11 +54,11 @@ namespace XmlConstruction
 				string line;
 				while ((line = sr.ReadLine()) != null)
 				{
-                    if (line.Trim() != String.Empty)
+                    string lineText = line.Trim();
+                    if (lineText != String.Empty)
                     {
                         string id = i.ToString();
                         i++;
-                        string lineText = line;
                         ConstructLineBreak(text, textName, id);
                         IEnumerable<string> words = from word in tokenBoundary.Split(lineText)
                                             where word != String.Empty
