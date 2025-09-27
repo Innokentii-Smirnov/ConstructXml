@@ -123,14 +123,6 @@ namespace XmlConstruction
             wordElement.AddAttribute("firstAnalysisIsPlaceholder", "true");
 			text.AppendChild(wordElement);
 
-			foreach(XmlNode childNode in wordElement.ChildNodes)
-			{
-				if (childNode.Name == "sGr")
-				{
-					isHit = true;
-					break;
-				}
-			}
 			if (isHit)
 			{
 				wordElement.AddAttribute("lg", "Hit");
