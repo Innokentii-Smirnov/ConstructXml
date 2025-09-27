@@ -79,7 +79,7 @@ namespace XmlConstruction
                                             select word;
                         foreach (string word in words)
                         {
-                            ConstructWord(doc, text, word);
+                            ConstructWord(text, word);
                         }
                     }
 				}
@@ -104,12 +104,8 @@ namespace XmlConstruction
             };
 			text.CreateChild("lb", attributes);
 		}
-		private static void ConstructWord(XmlDocument doc, XmlNode text, string word)
+		private static void ConstructWord(XmlNode text, string word)
 		{
-			XmlElement wordElement = doc.CreateElement("w");
-			wordElement.SetContent(word.ToLower());
-			wordElement.AddAttribute("trans", "");
-			wordElement.AddAttribute("mrp0sel", "");
             string placeholderAnalysis;
             bool isHit = false;
             if (punct.IsMatch(word))
@@ -121,14 +117,19 @@ namespace XmlConstruction
             {
               placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word.ToLower());
             }
-            wordElement.AddAttribute("mrp1", placeholderAnalysis);
-            wordElement.AddAttribute("firstAnalysisIsPlaceholder", "true");
-			text.AppendChild(wordElement);
-
-			if (isHit)
-			{
-				wordElement.AddAttribute("lg", "Hit");
-			}
+            Dictionary<string, string> attributes = new Dictionary<string, string>()
+            {
+              {"trans", ""},
+              {"mrp0sel", ""},
+              {"mrp1", placeholderAnalysis},
+              {"firstAnalysisIsPlaceholder", "true"}
+            };
+            if (isHit)
+            {
+              attributes.Add("lg", "Hit");
+            }
+            XmlNode wordElement = text.CreateChild("w", attributes);
+            wordElement.SetContent(word.ToLower());
 		}
 		private static void SetContent(this XmlNode node, string word)
 		{
@@ -156,22 +157,25 @@ namespace XmlConstruction
 				node.AddAttribute(pair.Key, pair.Value);
 			}
 		}
-		private static void CreateChild(this XmlNode node, string name)
+		private static XmlNode CreateChild(this XmlNode node, string name)
 		{
 			XmlNode child = node.OwnerDocument.CreateElement(name);
 			node.AppendChild(child);
+            return child;
 		}
-		private static void CreateChild(this XmlNode node, string name, string attr, string value)
+		private static XmlNode CreateChild(this XmlNode node, string name, string attr, string value)
 		{
 			XmlNode child = node.OwnerDocument.CreateElement(name);
 			child.AddAttribute(attr, value);
 			node.AppendChild(child);
+            return child;
 		}
-		private static void CreateChild(this XmlNode node, string name, Dictionary<string, string> attrs)
+		private static XmlNode CreateChild(this XmlNode node, string name, Dictionary<string, string> attrs)
 		{
 			XmlNode child = node.OwnerDocument.CreateElement(name);
 			child.AddAttributes(attrs);
 			node.AppendChild(child);
+            return child;
 		}
 		private static string Escape(this string s)
         {
