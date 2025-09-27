@@ -117,44 +117,7 @@ namespace XmlConstruction
             XmlNode wordElement = text.CreateChild("w", attributes);
             wordElement.SetContent(word.ToLower());
 		}
-		private static void SetContent(this XmlNode node, string word)
-		{
-            XmlText text = node.OwnerDocument.CreateTextNode(word);
-            node.AppendChild(text);
-		}
-		private static void AddAttribute(this XmlNode node, string name, string value)
-		{
-			XmlAttribute attribute = node.OwnerDocument.CreateAttribute(name);
-			attribute.Value = value;
-			node.Attributes.Append(attribute);
-		}
-		private static void AddAttributes(this XmlNode node, Dictionary<string, string> attrs)
-		{
-			foreach (KeyValuePair<string, string> pair in attrs)
-			{
-				node.AddAttribute(pair.Key, pair.Value);
-			}
-		}
-		private static XmlNode CreateChild(this XmlNode node, string name)
-		{
-			XmlNode child = node.OwnerDocument.CreateElement(name);
-			node.AppendChild(child);
-            return child;
-		}
-		private static XmlNode CreateChild(this XmlNode node, string name, string attr, string value)
-		{
-			XmlNode child = node.OwnerDocument.CreateElement(name);
-			child.AddAttribute(attr, value);
-			node.AppendChild(child);
-            return child;
-		}
-		private static XmlNode CreateChild(this XmlNode node, string name, Dictionary<string, string> attrs)
-		{
-			XmlNode child = node.OwnerDocument.CreateElement(name);
-			child.AddAttributes(attrs);
-			node.AppendChild(child);
-            return child;
-		}
+
 		private static string Escape(this string s)
         {
           s = s.Replace("&", "-");
@@ -165,4 +128,45 @@ namespace XmlConstruction
           return s;
         }
 	}
+	internal static class XmlUtilities
+	{
+        internal static void SetContent(this XmlNode node, string word)
+        {
+          XmlText text = node.OwnerDocument.CreateTextNode(word);
+          node.AppendChild(text);
+        }
+        internal static void AddAttribute(this XmlNode node, string name, string value)
+        {
+          XmlAttribute attribute = node.OwnerDocument.CreateAttribute(name);
+          attribute.Value = value;
+          node.Attributes.Append(attribute);
+        }
+        internal static void AddAttributes(this XmlNode node, Dictionary<string, string> attrs)
+        {
+          foreach (KeyValuePair<string, string> pair in attrs)
+          {
+            node.AddAttribute(pair.Key, pair.Value);
+          }
+        }
+        internal static XmlNode CreateChild(this XmlNode node, string name)
+        {
+          XmlNode child = node.OwnerDocument.CreateElement(name);
+          node.AppendChild(child);
+          return child;
+        }
+        internal static XmlNode CreateChild(this XmlNode node, string name, string attr, string value)
+        {
+          XmlNode child = node.OwnerDocument.CreateElement(name);
+          child.AddAttribute(attr, value);
+          node.AppendChild(child);
+          return child;
+        }
+        internal static XmlNode CreateChild(this XmlNode node, string name, Dictionary<string, string> attrs)
+        {
+          XmlNode child = node.OwnerDocument.CreateElement(name);
+          child.AddAttributes(attrs);
+          node.AppendChild(child);
+          return child;
+        }
+    }
 }
