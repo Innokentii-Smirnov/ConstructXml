@@ -46,7 +46,7 @@ namespace XmlConstruction
 			XmlNode publ = doc.GetElementsByTagName("AO:TxtPubl")[0];
 			string textName = Path.GetFileNameWithoutExtension(infile);
             publ.RemoveAll();
-			publ.SetContent(textName.Escape());
+			publ.AddText(textName.Escape());
 			XmlNode text = doc.GetElementsByTagName("text")[0];
 			using (StreamReader sr = new StreamReader(infile))
 			{
@@ -115,7 +115,7 @@ namespace XmlConstruction
               attributes.Add("lg", "Hit");
             }
             XmlNode wordElement = text.CreateChild("w", attributes);
-            wordElement.SetContent(word.ToLower());
+            wordElement.AddText(word.ToLower());
 		}
 
 		private static string Escape(this string s)
@@ -130,7 +130,7 @@ namespace XmlConstruction
 	}
 	internal static class XmlUtilities
 	{
-        internal static void SetContent(this XmlNode node, string word)
+        internal static void AddText(this XmlNode node, string word)
         {
           XmlText text = node.OwnerDocument.CreateTextNode(word);
           node.AppendChild(text);
