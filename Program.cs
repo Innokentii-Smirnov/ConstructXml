@@ -106,12 +106,8 @@ namespace XmlConstruction
 		{
 			XmlElement wordElement = doc.CreateElement("w");
 			wordElement.SetContent(word.ToLower());
-			XmlAttribute transAttribute = doc.CreateAttribute("trans");
-			transAttribute.Value = "";
-			wordElement.Attributes.Append(transAttribute);
-			XmlAttribute mrp0selAttribute = doc.CreateAttribute("mrp0sel");
-			mrp0selAttribute.Value = "";
-			wordElement.Attributes.Append(mrp0selAttribute);
+			wordElement.AddAttribute("trans", "");
+			wordElement.AddAttribute("mrp0sel", "");
             string placeholderAnalysis;
             bool isHit = false;
             if (punct.IsMatch(word))
@@ -137,9 +133,7 @@ namespace XmlConstruction
 			}
 			if (isHit)
 			{
-				XmlAttribute langAttriubte = doc.CreateAttribute("lg");
-				langAttriubte.Value = "Hit";
-				wordElement.Attributes.Append(langAttriubte);
+				wordElement.AddAttribute("lg", "Hit");
 			}
 		}
 		const string rasur = "(Rasur)";
