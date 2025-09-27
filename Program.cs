@@ -155,9 +155,8 @@ namespace XmlConstruction
         }
         internal static XmlNode CreateChild(this XmlNode node, string name, Dictionary<string, string> attrs)
         {
-          XmlNode child = node.OwnerDocument.CreateElement(name);
+          XmlNode child = node.CreateChild(name);
           child.AddAttributes(attrs);
-          node.AppendChild(child);
           return child;
         }
         internal static XmlNode CreateChild(this XmlNode node, string name, string textContent, Dictionary<string, string> attrs)
