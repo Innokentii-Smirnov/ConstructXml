@@ -153,13 +153,6 @@ namespace XmlConstruction
           node.AppendChild(child);
           return child;
         }
-        internal static XmlNode CreateChild(this XmlNode node, string name, string attr, string value)
-        {
-          XmlNode child = node.OwnerDocument.CreateElement(name);
-          child.AddAttribute(attr, value);
-          node.AppendChild(child);
-          return child;
-        }
         internal static XmlNode CreateChild(this XmlNode node, string name, Dictionary<string, string> attrs)
         {
           XmlNode child = node.OwnerDocument.CreateElement(name);
