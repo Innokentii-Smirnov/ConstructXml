@@ -18,9 +18,7 @@ namespace XmlConstruction
 	public static class XmlConstructor
 	{
 		const string templateXml = "template.xml";
-        const string punctPos = "PUNCT";
         static Regex tokenBoundary = new Regex(@"\s+|(?<=\w)(?=\W)|(?<=\W)(?=\w)|(?<=\W)(?=\W)");
-        static Regex punct = new Regex(@"\W");
 		public static void ConstructDirectory(string source, string target)
 		{
 			List<string> directories = new List<string>(Directory.GetDirectories(source, "*", SearchOption.AllDirectories));
@@ -59,13 +57,13 @@ namespace XmlConstruction
                     {
                         string id = i.ToString();
                         i++;
-                        ConstructLineBreak(text, textName, id);
+                        text.ConstructLineBreak(textName, id);
                         IEnumerable<string> words = from word in tokenBoundary.Split(lineText)
                                             where word != String.Empty
                                             select word;
                         foreach (string word in words)
                         {
-                            ConstructWord(text, word);
+                            text.ConstructWord(word);
                         }
                     }
 				}
@@ -80,43 +78,6 @@ namespace XmlConstruction
 				doc.Save(sw);
 			}
 		}
-		private static void ConstructLineBreak(XmlNode text, string txtid, string lnr)
-		{
-            Dictionary<string, string> attributes = new Dictionary<string, string>()
-            {
-              {"txtid", txtid},
-              {"lnr", lnr},
-              {"lg", "Hur"}
-            };
-			text.CreateChild("lb", attributes);
-		}
-		private static void ConstructWord(XmlNode text, string word)
-		{
-            string placeholderAnalysis;
-            bool isHit = false;
-            if (punct.IsMatch(word))
-            {
-              placeholderAnalysis = String.Format(" {0} @ @ @ {1} @ ", word, punctPos);
-              isHit = true;
-            }
-            else
-            {
-              placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word.ToLower());
-            }
-            Dictionary<string, string> attributes = new Dictionary<string, string>()
-            {
-              {"trans", ""},
-              {"mrp0sel", ""},
-              {"mrp1", placeholderAnalysis},
-              {"firstAnalysisIsPlaceholder", "true"}
-            };
-            if (isHit)
-            {
-              attributes.Add("lg", "Hit");
-            }
-            text.CreateChild("w", word.ToLower(), attributes);
-		}
-
 		private static string Escape(this string s)
         {
           s = s.Replace("&", "-");
@@ -127,6 +88,47 @@ namespace XmlConstruction
           return s;
         }
 	}
+	internal static class ElementConstructor
+	{
+      const string punctPos = "PUNCT";
+      static Regex punct = new Regex(@"\W");
+      internal static void ConstructLineBreak(this XmlNode text, string txtid, string lnr)
+      {
+        Dictionary<string, string> attributes = new Dictionary<string, string>()
+        {
+          {"txtid", txtid},
+          {"lnr", lnr},
+          {"lg", "Hur"}
+        };
+        text.CreateChild("lb", attributes);
+      }
+      internal static void ConstructWord(this XmlNode text, string word)
+      {
+        string placeholderAnalysis;
+        bool isHit = false;
+        if (punct.IsMatch(word))
+        {
+          placeholderAnalysis = String.Format(" {0} @ @ @ {1} @ ", word, punctPos);
+          isHit = true;
+        }
+        else
+        {
+          placeholderAnalysis = String.Format(" {0} @ @ @ @ ", word.ToLower());
+        }
+        Dictionary<string, string> attributes = new Dictionary<string, string>()
+        {
+          {"trans", ""},
+          {"mrp0sel", ""},
+          {"mrp1", placeholderAnalysis},
+          {"firstAnalysisIsPlaceholder", "true"}
+        };
+        if (isHit)
+        {
+          attributes.Add("lg", "Hit");
+        }
+        text.CreateChild("w", word.ToLower(), attributes);
+      }
+    }
 	internal static class XmlUtilities
 	{
         internal static void AddText(this XmlNode node, string textContent)
