@@ -56,23 +56,9 @@ namespace XmlConstruction
 				{
                     if (line.Trim() != String.Empty)
                     {
-                        string[] split = line.Split('\t');
-                        string id, lineText;
-                        if (split.Length == 2)
-                        {
-                            id = split[0];
-                            lineText = split[1];
-                        }
-                        else if (split.Length == 1)
-                        {
-                            id = i.ToString();
-                            i++;
-                            lineText = line;
-                        }
-                        else
-                        {
-                            throw new ArgumentException(line);
-                        }
+                        string id = i.ToString();
+                        i++;
+                        string lineText = line;
                         ConstructLineBreak(text, textName, id);
                         IEnumerable<string> words = from word in tokenBoundary.Split(lineText)
                                             where word != String.Empty
