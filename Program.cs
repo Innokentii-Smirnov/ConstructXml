@@ -114,8 +114,7 @@ namespace XmlConstruction
             {
               attributes.Add("lg", "Hit");
             }
-            XmlNode wordElement = text.CreateChild("w", attributes);
-            wordElement.AddText(word.ToLower());
+            text.CreateChild("w", word.ToLower(), attributes);
 		}
 
 		private static string Escape(this string s)
@@ -166,6 +165,12 @@ namespace XmlConstruction
           XmlNode child = node.OwnerDocument.CreateElement(name);
           child.AddAttributes(attrs);
           node.AppendChild(child);
+          return child;
+        }
+        internal static XmlNode CreateChild(this XmlNode node, string name, string textContent, Dictionary<string, string> attrs)
+        {
+          XmlNode child = node.CreateChild(name, attrs);
+          child.AddText(textContent);
           return child;
         }
     }
