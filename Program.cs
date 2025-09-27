@@ -46,7 +46,8 @@ namespace XmlConstruction
 			}
 			XmlNode publ = doc.GetElementsByTagName("AO:TxtPubl")[0];
 			string textName = Path.GetFileNameWithoutExtension(infile);
-			publ.InnerXml = textName.Escape();
+            publ.RemoveAll();
+			publ.SetContent(textName.Escape());
 			XmlNode text = doc.GetElementsByTagName("text")[0];
 			using (StreamReader sr = new StreamReader(infile))
 			{
