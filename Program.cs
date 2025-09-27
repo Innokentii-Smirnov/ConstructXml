@@ -15,11 +15,11 @@ namespace XmlConstruction
 			XmlConstructor.ConstructDirectory(source, target);
 		}
 	}
-	public static class XmlConstructor
+	internal static class XmlConstructor
 	{
 		const string templateXml = "template.xml";
         static Regex tokenBoundary = new Regex(@"\s+|(?<=\w)(?=\W)|(?<=\W)(?=\w)|(?<=\W)(?=\W)");
-		public static void ConstructDirectory(string source, string target)
+		internal static void ConstructDirectory(string source, string target)
 		{
 			List<string> directories = new List<string>(Directory.GetDirectories(source, "*", SearchOption.AllDirectories));
             directories.Add(source);
@@ -34,7 +34,7 @@ namespace XmlConstruction
 				}
 			}
 		}
-		public static void ConstructFile(string infile, string outfile)
+		internal static void ConstructFile(string infile, string outfile)
 		{
 			XmlDocument doc = new XmlDocument();
 			using (StreamReader sr = new StreamReader(templateXml))
