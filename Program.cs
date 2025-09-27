@@ -129,9 +129,9 @@ namespace XmlConstruction
 	}
 	internal static class XmlUtilities
 	{
-        internal static void AddText(this XmlNode node, string word)
+        internal static void AddText(this XmlNode node, string textContent)
         {
-          XmlText text = node.OwnerDocument.CreateTextNode(word);
+          XmlText text = node.OwnerDocument.CreateTextNode(textContent);
           node.AppendChild(text);
         }
         internal static void AddAttribute(this XmlNode node, string name, string value)
