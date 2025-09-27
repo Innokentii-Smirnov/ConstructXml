@@ -73,7 +73,7 @@ namespace XmlConstruction
                         {
                             throw new ArgumentException(line);
                         }
-                        ConstructLineBreak(doc, text, textName, id);
+                        ConstructLineBreak(text, textName, id);
                         IEnumerable<string> words = from word in tokenBoundary.Split(lineText)
                                             where word != String.Empty
                                             select word;
@@ -94,13 +94,15 @@ namespace XmlConstruction
 				doc.Save(sw);
 			}
 		}
-		private static void ConstructLineBreak(XmlDocument doc, XmlNode text, string txtid, string lnr)
+		private static void ConstructLineBreak(XmlNode text, string txtid, string lnr)
 		{
-			XmlElement lineElement = doc.CreateElement("lb");
-			lineElement.AddAttribute("txtid", txtid);
-			lineElement.AddAttribute("lnr", lnr);
-			lineElement.AddAttribute("lg", "Hur");
-			text.AppendChild(lineElement);
+            Dictionary<string, string> attributes = new Dictionary<string, string>()
+            {
+              {"txtid", txtid},
+              {"lnr", lnr},
+              {"lg", "Hur"}
+            };
+			text.CreateChild("lb", attributes);
 		}
 		private static void ConstructWord(XmlDocument doc, XmlNode text, string word)
 		{
