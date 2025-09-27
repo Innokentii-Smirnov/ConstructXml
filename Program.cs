@@ -136,14 +136,6 @@ namespace XmlConstruction
             XmlText text = node.OwnerDocument.CreateTextNode(word);
             node.AppendChild(text);
 		}
-		private static bool IsSumeric(this char character)
-		{
-			return char.IsUpper(character) || character == '.';
-		}
-		private static bool HasSubstring(this string word, string s, int i)
-		{
-			return i + s.Length <= word.Length &&  word.Substring(i, s.Length) == s;
-		}
 		private static void AddAttribute(this XmlNode node, string name, string value)
 		{
 			XmlAttribute attribute = node.OwnerDocument.CreateAttribute(name);
